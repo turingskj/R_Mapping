@@ -1,8 +1,8 @@
-#library(sf)
+library(sf)
 #library(raster)
 #library(dplyr)
 library(spData)
-library(spDataLarge)
+# library(spDataLarge)
 
 library(tmap)    # for static and interactive maps
 #library(leaflet) # for interactive maps
@@ -24,7 +24,7 @@ tmap_mode("plot")
 
 
 us_states_map <- tm_shape(us_states, projection = 2163) + tm_polygons() + 
-  tm_layout(frame = FALSE)
+  tm_layout(frame = FALSE) + tm_shape(hawaii)
 us_states_map
 
 # adding user data for plot. Note that the data just needs to be match the number of category
@@ -34,6 +34,8 @@ visited <- runif(nrow(my_usstates), min=0, max=20)
 my_usstates$visited = floor(visited+0.5)
 tm_shape(my_usstates, projection = 2163) + tm_polygons("visited")
 tm_shape(my_usstates, projection = 2163) + tm_polygons()
+
+
 
 
 # rgdal package --> download the polygon data from http://www.personal.psu.edu/users/a/c/acr181/election.html
@@ -50,6 +52,12 @@ plot(US3)
 
 library(usmap)
 library(ggplot)
+library(ggplot2)
+
+plot_usmap("counties")
+plot_usmap("states") 
+
+# read data (population data)
 mdcountypop<-usmap::countypop[which(usmap::countypop$abbr=="MD"),]
 
 fileconnect1 <- url("https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv")
@@ -74,10 +82,24 @@ names(longestName)
 mydate <- "2020-05-24"
 mddata <- subset(Alldata, state=="Maryland" & date ==mydate)
 dedata <- subset(Alldata, state=="Delaware" & date ==mydate)
+alldata <-subset(Alldata, date ==mydate)
+
 
 plot_usmap(include=c("MD"), data= mddata, value="cases") +  
   scale_fill_continuous(low = "white", high = "red", name = paste("MD Covid-19 cases:", mydate), label = scales::comma, 
                         limit = c(0, 20000)) +  theme(legend.position = "right" ) 
+
+# try to find a state sum
+statecase <- tapply(alldata$cases, alldata$state, FUN=sum)
+statecase <- as.data.frame(statecase)
+statecase$state <- rownames(statecase)
+maxcase <- max(statecase$statecase)
+
+plot_usmap("states", data=statecase, value="statecase", color="blue", size=1.1, labels = FALSE) +  
+scale_fill_continuous(low = "white", high = "red", name = paste("Visited States"), 
+                        breaks = seq(from=0, to=maxcase, by=100000), label = scales::comma) +  theme(legend.position = "right" ) 
+
+
 
 
 plot_usmap(data=statepop, value="pop_2015") +
