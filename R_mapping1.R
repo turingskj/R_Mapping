@@ -20,13 +20,24 @@ library(ggplot2)
 
 # using tmap library
 
-tmap_mode(c("plot", "view"))
+tmap_mode("plot")
+
 
 us_states_map <- tm_shape(us_states, projection = 2163) + tm_polygons() + 
   tm_layout(frame = FALSE)
 us_states_map
 
 
+# adding user data for plot. Note that the data just needs to be match the number of category
+
+my_usstates <- us_states[c("GEOID", "NAME")]
+visited <- runif(nrow(my_usstates), min=0, max=20)
+my_usstates$visited = floor(visited+0.5)
+tm_shape(my_usstates) + tm_polygons("visited")
+
+
+
+# usmap package
 
 library(usmap)
 mdcountypop<-usmap::countypop[which(usmap::countypop$abbr=="MD"),]
@@ -56,3 +67,5 @@ mddata <- subset(Alldata, state=="Maryland" & date ==mydate)
 
 plot_usmap("counties", include=c("MD"), data= mddata, value="cases") +  
   scale_fill_continuous(low = "white", high = "red", name = paste("MD Covid-19 cases:", mydate), label = scales::comma)
+
+
