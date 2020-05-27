@@ -24,8 +24,16 @@ tmap_mode("plot")
 
 
 us_states_map <- tm_shape(us_states, projection = 2163) + tm_polygons() + 
-  tm_layout(frame = FALSE) + tm_shape(hawaii)
+  tm_layout(frame = FALSE)
 us_states_map
+us_hawaii_map = tm_shape(hawaii, projection = 2163) + tm_polygons()
+us_hawaii_map
+
+
+# using tmap and tigris package (census data map) # see the manual for tigris data
+us_geomap <- states(class="sf")
+tm_shape(us_geomap, projection = 2163) + tm_polygons()
+
 
 # adding user data for plot. Note that the data just needs to be match the number of category
 
@@ -65,7 +73,7 @@ Alldata <- read.table(fileconnect1, sep =",", header = TRUE, encoding="UTF-8", q
 # or
 # Alldata <- read.csv(fileconnect1, sep =",", header = TRUE, encoding="UTF-8")
 
-head(Alldata)
+head(Alldata)  # check if county names include numeric values
 namelength <- sapply(as.character(Alldata$county), nchar) # find the lenght of county name
 longestName <- which.max(namelength) # give a integer value with a name (a longest county name)
 names(longestName)
@@ -79,13 +87,13 @@ names(longestName)
 #temp1 <- sum(temp1) 
 # if nrow(Alldata) is the same as temp1, then no county names have numeric value
 
-mydate <- "2020-05-24"
+mydate <- "2020-05-25"
 mddata <- subset(Alldata, state=="Maryland" & date ==mydate)
 dedata <- subset(Alldata, state=="Delaware" & date ==mydate)
 alldata <-subset(Alldata, date ==mydate)
 
 
-plot_usmap(include=c("MD"), data= mddata, value="cases") +  
+plot_usmap(include=c("MD"), data= mddata, value="cases", projection = 2163) +  
   scale_fill_continuous(low = "white", high = "red", name = paste("MD Covid-19 cases:", mydate), label = scales::comma, 
                         limit = c(0, 20000)) +  theme(legend.position = "right" ) 
 
@@ -94,12 +102,11 @@ statecase <- tapply(alldata$cases, alldata$state, FUN=sum)
 statecase <- as.data.frame(statecase)
 statecase$state <- rownames(statecase)
 maxcase <- max(statecase$statecase)
+maxcase <- (ceiling(maxcase/100000))*100000
 
-plot_usmap("states", data=statecase, value="statecase", color="blue", size=1.1, labels = FALSE) +  
-scale_fill_continuous(low = "white", high = "red", name = paste("Visited States"), 
-                        breaks = seq(from=0, to=maxcase, by=100000), label = scales::comma) +  theme(legend.position = "right" ) 
-
-
+plot_usmap("states", data=statecase, value="statecase", color="red", size=1, labels = FALSE) +  
+scale_fill_continuous(low = "white", high = "red", name = paste("Covid19 cases"), 
+                        breaks = seq(from=0, to = maxcase, by=100000), label = scales::comma) +  theme(legend.position = "right" ) 
 
 
 plot_usmap(data=statepop, value="pop_2015") +
@@ -108,14 +115,13 @@ plot_usmap(data=statepop, value="pop_2015") +
 
 plot_usmap(data=countypop, value="pop_2015") +
   scale_fill_continuous(low = "white", high = "red", name = paste("2015 County Pop", mydate), label = scales::comma, 
-                        trans = "log")
+                        trans = "log") + theme(legend.position = "right")
 
 
 # two different maps with two different colors
-mdstate <- plot_usmap(include=c("MD"), data= mddata, value="cases", color="black", size=1.5)  
-
-destate <- plot_usmap(include=c("DE"), data= dedata, value="cases", color="blue", size =1.5)  
+mdstate <- plot_usmap(include=c("MD"), data= mddata,  value="cases", color="black", size=1)  
+destate <- plot_usmap(include=c("DE"), data= dedata,  value="cases", color="blue", size =1)  
 
 ggplot() + mdstate$layers[[1]] + destate$layers[[1]] + mdstate$theme +  
   scale_fill_continuous(low = "white", high = "red", name = paste("Covid-19 cases:", mydate), label = scales::comma, 
-                        limit = c(0, 15000)) +  theme(legend.position = "right" )
+                        limit = c(0, 20000)) +  theme(legend.position = "right" )
