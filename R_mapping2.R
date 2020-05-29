@@ -2,10 +2,12 @@ library(sf)
 #library(raster)
 library(dplyr)
 library(spData)
-library(spDataLarge)
+library(tigris)
+#library(spDataLarge)
 
 library(tmap)    # for static and interactive maps
 library(tmaptools)
+library(usmap)
 #library(leaflet) # for interactive maps
 #library(mapview)
 library(ggplot2)
@@ -23,7 +25,7 @@ library(ggplot2)
 
 tmap_mode("plot")
 
-
+# us spData set (us_states...)
 us_states_map <- tm_shape(us_states, projection = 2163) + tm_polygons() + 
   tm_layout(frame = FALSE)
 us_states_map
@@ -39,7 +41,7 @@ library(dplyr)
 
 # using tmap and tigris package (census data map) # see the manual for tigris data
 us_geomap <- states(class="sf") # import feature data only using states() of the tigris package
-tm_shape(us_geomap, projection = 2163) + tm_polygons()
+tm_shape(us_geomap, projection = 2163) + tm_polygons()  # this will show Alaska and Hawaii together
 
 
 
@@ -47,19 +49,19 @@ tm_shape(us_geomap, projection = 2163) + tm_polygons()
 
 my_usstates <- us_states[c("GEOID", "NAME")]  # us_states is the dataset of spData package
                                               # Hawaii and Alaska are seperate datasets of the package
-us_geomap_ct <- counties(class="sf") # import feature data only
+us_geomap_ct <- counties(class="sf", cb=TRUE) # import feature data only
 
 us_geomap_ct <- subset(us_geomap_ct, us_geomap_ct[["STATEFP"]] %in% my_usstates$GEOID)  
+
+# select the continuous us states (excluding Hawaii, Alaska, and other islands.)
+# if you want MD only..
+us_geomap_ct <- subset(us_geomap_ct, us_geomap_ct[["STATEFP"]] %in% "24")  
+
 visited <- runif(nrow(us_geomap_ct), min=0, max=20)
-
-visited <- runif(nrow(my_usstates), min=0, max=20)
-
 visited = floor(visited+0.5)
 us_geomap_ct$visited <- visited
 
-tm_shape(us_geomap_ct, projection = 2163) + tm_polygons("visited")
-
-
+tm_shape(us_geomap_ct, projection = 2163) + tm_polygons("visited") + tm_text("NAME", size = 9/10)
 
 
 #plot county map
@@ -75,7 +77,6 @@ my_usstates <- us_states[c("GEOID", "NAME")]
 us_geomap_48 <- subset(us_geomap, us_geomap[["NAME"]] %in% my_usstates$NAME)  
 visited <- runif(nrow(my_usstates), min=0, max=20)
 visited = floor(visited+0.5)
-
 
 us_geomap_48$visited <- visited
 tm_shape(us_geomap_48, projection = 2163) + tm_polygons("visited")
