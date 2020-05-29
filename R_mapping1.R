@@ -29,9 +29,9 @@ us_states_map
 us_hawaii_map = tm_shape(hawaii, projection = 2163) + tm_polygons()
 us_hawaii_map
 
-
+library(tigris)
 # using tmap and tigris package (census data map) # see the manual for tigris data
-us_geomap <- states(class="sf")
+us_geomap <- states(class="sf") # import feature data only
 tm_shape(us_geomap, projection = 2163) + tm_polygons()
 
 
