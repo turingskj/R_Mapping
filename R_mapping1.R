@@ -1,8 +1,8 @@
 library(sf)
 #library(raster)
-#library(dplyr)
+library(dplyr)
 library(spData)
-# library(spDataLarge)
+library(spDataLarge)
 
 library(tmap)    # for static and interactive maps
 library(tmaptools)
@@ -36,13 +36,19 @@ us_alaska_map
 
 library(tigris)
 library(dplyr)
+
 # using tmap and tigris package (census data map) # see the manual for tigris data
 us_geomap <- states(class="sf") # import feature data only
 tm_shape(us_geomap, projection = 2163) + tm_polygons()
 
-
 visited <- runif(nrow(my_usstates), min=0, max=20)
 visited = floor(visited+0.5)
+
+#plot county map
+us_geomap <- counties(class="sf") # import feature data only
+tm_shape(us_geomap, projection = 2163) + tm_polygons()
+
+
 
 # get the names of continent us states + DC from spData set
 my_usstates <- us_states$NAME
