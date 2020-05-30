@@ -72,7 +72,7 @@ tm_shape(us_geomap, projection = 2163) + tm_polygons()
 my_usstates <- us_states$NAME
 my_usstates <- us_states[c("GEOID", "NAME")]
 
-us_geomap_48 <- subset(us_geomap, us_geomap[["NAME"]] %in% my_usstates$GEOID)  
+us_geomap_48 <- subset(us_geomap, us_geomap[["GEOID"]] %in% my_usstates$GEOID)  
 visited <- runif(nrow(my_usstates), min=0, max=20)
 visited = floor(visited+0.5)
 
