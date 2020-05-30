@@ -50,7 +50,6 @@ tm_shape(us_geomap, projection = 2163) + tm_polygons()  # this will show Alaska 
 my_usstates <- us_states[c("GEOID", "NAME")]  # us_states is the dataset of spData package
                                               # Hawaii and Alaska are seperate datasets of the package
 us_geomap_ct <- counties(class="sf", cb=TRUE) # import feature data only
-
 us_geomap_ct <- subset(us_geomap_ct, us_geomap_ct[["STATEFP"]] %in% my_usstates$GEOID)  
 
 # select the continuous us states (excluding Hawaii, Alaska, and other islands.)
@@ -61,13 +60,12 @@ visited <- runif(nrow(us_geomap_ct), min=0, max=20)
 visited = floor(visited+0.5)
 us_geomap_ct$visited <- visited
 
-tm_shape(us_geomap_ct, projection = 2163) + tm_polygons("visited") + tm_text("NAME", size = 9/10)
+tm_shape(us_geomap_ct, projection = 2163) + tm_polygons("visited") #+ tm_text("NAME", size = 9/10)
 
 
 #plot county map
 us_geomap <- counties(class="sf") # import feature data only
 tm_shape(us_geomap, projection = 2163) + tm_polygons()
-
 
 
 # get the names of continent us states + DC from spData set
@@ -92,6 +90,8 @@ mddata <- subset(Alldata, state=="Maryland" & date ==mydate)
 dedata <- subset(Alldata, state=="Delaware" & date ==mydate)
 alldata <-subset(Alldata, date ==mydate)
 
+
+my_usstates <- us_states[c("GEOID", "NAME")]  # us_states is the dataset of spData package
 statecase <- tapply(alldata$cases, alldata$state, FUN=sum)
 statecase <- as.data.frame(statecase)
 statecase$NAME <- rownames(statecase)
@@ -102,7 +102,7 @@ maxcase <- max(statecase$statecase)
 maxcase <- (ceiling(maxcase/100000))*100000
 
 tm_shape(us_geomap48_covid, projection = 2163) +  
-  tm_fill("statecase", title="Covid19 5-26-2020", breaks = seq(from=0, to = maxcase, by=100000)) +
+  tm_fill("statecase", title="Covid19 5-26-2020", breaks = seq(from=0, to = maxcase, by=50000)) +
   tm_borders("black")
 
 tmap_mode("view")
@@ -175,9 +175,13 @@ dedata <- subset(Alldata, state=="Delaware" & date ==mydate)
 alldata <-subset(Alldata, date ==mydate)
 
 
-plot_usmap(include=c("MD"), data= mddata, value="cases", projection = 2163) +  
-  scale_fill_continuous(low = "white", high = "red", name = paste("MD Covid-19 cases:", mydate), label = scales::comma, 
-                        limit = c(0, 20000)) +  theme(legend.position = "right" ) 
+maxcase <- max(mddata$cases)
+maxcase <- (ceiling(maxcase/10000))*10000
+
+plot_usmap(include=c("MD"), data= mddata, value="cases", color="black") +  
+  scale_fill_continuous(low = "white", high = "red", name = paste("MD Covid-19 cases:"), 
+                        breaks = seq(from=0, to = maxcase, by=5000)) +
+                      theme(legend.position = "right" )
 
 # try to find a state sum
 statecase <- tapply(alldata$cases, alldata$state, FUN=sum)
@@ -186,9 +190,10 @@ statecase$state <- rownames(statecase)
 maxcase <- max(statecase$statecase)
 maxcase <- (ceiling(maxcase/100000))*100000
 
-plot_usmap("states", data=statecase, value="statecase", color="red", size=1, labels = FALSE) +  
+plot_usmap("states", data=statecase, value="statecase", color="gray", size=1, labels = FALSE) +  
 scale_fill_continuous(low = "white", high = "red", name = paste("Covid19 cases"), 
-                        breaks = seq(from=0, to = maxcase, by=100000), label = scales::comma) +  theme(legend.position = "right" ) 
+                        breaks = seq(from=0, to = maxcase, by=100000), label = scales::comma) +  
+  theme(legend.position = "right" ) 
 
 
 plot_usmap(data=statepop, value="pop_2015") +
@@ -204,6 +209,6 @@ plot_usmap(data=countypop, value="pop_2015") +
 mdstate <- plot_usmap(include=c("MD"), data= mddata,  value="cases", color="black", size=1)  
 destate <- plot_usmap(include=c("DE"), data= dedata,  value="cases", color="blue", size =1)  
 
-ggplot() + mdstate$layers[[1]] + destate$layers[[1]] + mdstate$theme +  
+ggplot(projection = 2163) + mdstate$layers[[1]] + destate$layers[[1]] + mdstate$theme +  
   scale_fill_continuous(low = "white", high = "red", name = paste("Covid-19 cases:", mydate), label = scales::comma, 
                         limit = c(0, 20000)) +  theme(legend.position = "right" )
