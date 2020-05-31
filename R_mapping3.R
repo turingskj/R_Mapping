@@ -51,10 +51,10 @@ my_usstates <- us_states[c("GEOID", "NAME")]  # us_states is the dataset of spDa
                                               # Hawaii and Alaska are seperate datasets of the package
 us_geomap_ct <- counties(class="sf", cb=TRUE) # import feature data only
 us_geomap_ct <- subset(us_geomap_ct, us_geomap_ct[["STATEFP"]] %in% my_usstates$GEOID)  
+#select the continuous us states (excluding Hawaii, Alaska, and other islands.)
 
-# select the continuous us states (excluding Hawaii, Alaska, and other islands.)
 # if you want MD only..
-us_geomap_ct <- subset(us_geomap_ct, us_geomap_ct[["STATEFP"]] %in% "24")  
+#us_geomap_ct <- subset(us_geomap_ct, us_geomap_ct[["STATEFP"]] %in% "24")  
 
 visited <- runif(nrow(us_geomap_ct), min=0, max=20)
 visited = floor(visited+0.5)
@@ -62,18 +62,18 @@ us_geomap_ct$visited <- visited
 
 tm_shape(us_geomap_ct, projection = 2163) + tm_polygons("visited") #+ tm_text("NAME", size = 9/10)
 
-
 #plot county map
 us_geomap <- counties(class="sf") # import feature data only
 tm_shape(us_geomap, projection = 2163) + tm_polygons()
 
 
+
 # get the names of continent us states + DC from spData set
-my_usstates <- us_states$NAME
+#my_usstates <- us_states$NAME
 my_usstates <- us_states[c("GEOID", "NAME")]
 
-us_geomap_48 <- subset(us_geomap, us_geomap[["GEOID"]] %in% my_usstates$GEOID)  
-visited <- runif(nrow(my_usstates), min=0, max=20)
+us_geomap_48 <- subset(us_geomap, us_geomap[["STATEFP"]] %in% my_usstates$GEOID)  
+visited <- runif(nrow(us_geomap_48), min=0, max=20)
 visited = floor(visited+0.5)
 
 us_geomap_48$visited <- visited
@@ -104,17 +104,15 @@ maxcase <- (ceiling(maxcase/100000))*100000
 
 tm_shape(my_usstates_covid19, projection = 2163) +  
   tm_fill("statecase", title="Covid19 5-26-2020", breaks = seq(from=0, to = maxcase, by=50000)) +
-  tm_borders("black")
+  tm_borders("black") + tm_text("statecase", size = 3/5)
 
 
-
-# add covid 19 data to county maps
+# Add covid 19 data to county maps
 
 us_geomap <- counties(class="sf") # import feature data only
 my_usstates <- us_states$NAME  # from spData
 my_usstates <- us_states[c("GEOID", "NAME")]
 us_geomap_48 <- subset(us_geomap, us_geomap[["STATEFP"]] %in% my_usstates$GEOID)  
-
 
 us_geomap48_covid <- merge(us_geomap_48, alldata, by="NAME")
 
@@ -134,8 +132,7 @@ maxcase <- (ceiling(maxcase/100000))*100000
 
 
 
-
-# add covid 19 county data MD map only.
+# Add covid 19 county data MD map only.
 
 us_geomap <- counties(class="sf") # import feature data only
 
@@ -152,28 +149,25 @@ maxcase <- (ceiling(maxcase/10000))*10000
 
 tm_shape(md_geomap_covid, projection = 2163) +  
   tm_fill("cases", title="Covid19 5-28-2020", breaks = seq(from=1, to = maxcase, by=3000)) +
-  tm_borders("gray") + tm_text("NAME", size=1/1, col="blue", fontface="bold")
+  tm_borders("gray") + tm_text("NAME", size=4/5, col="blue", fontface="bold")
 
 
-
-
-
-
-
+#########################
+#########################
 # using Census Bureau map
+#########################
+library(rgdal)
 uscount_cbmap <- readOGR(dsn="mapdata/cb_2019_us_all_5m", layer = "cb_2019_us_state_5m")
 tm_shape(uscount_cbmap, projection =2163) + tm_polygons()
 
 
-
-# adding user data for plot. Note that the data just needs to be match the number of category
+# Adding user data for plot. Note that the data just needs to be match the number of category
 library(spData)
 my_usstates <- us_states[c("GEOID", "NAME")]
 visited <- runif(nrow(my_usstates), min=0, max=20)
 my_usstates$visited = floor(visited+0.5)
 tm_shape(my_usstates, projection = 2163) + tm_polygons("visited")
 tm_shape(my_usstates, projection = 2163) + tm_polygons()
-
 
 
 
@@ -184,13 +178,9 @@ US3 <- readOGR(dsn="mapdata/2004_Election", layer = "2004_Election_Counties")
 plot(US3)
 
 
-
-
-
 # usmap package
 
 library(usmap)
-library(ggplot)
 library(ggplot2)
 
 plot_usmap("counties")
