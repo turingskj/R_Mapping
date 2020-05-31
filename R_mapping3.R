@@ -157,7 +157,7 @@ maxcase <- max(md_geomap_covid$cases)
 maxcase <- (ceiling(maxcase/10000))*10000
 
 tmap_mode("plot")
-<<<<<<< HEAD
+
 tm_shape(md_geomap_covid, projection = 2163) +  
   tm_fill("cases", title="Covid19 5-28-2020", breaks = seq(from=1, to = maxcase, by=2000)) +
   tm_borders("gray") + tm_text("cases", size=1, col="blue", fontface="bold") +
@@ -169,7 +169,7 @@ tm_shape(md_geomap_covid, projection = 2163) +
   #tm_fill("cases", title="Covid19 5-28-2020", breaks = seq(from=1, to = maxcase, by=2000)) +
   #tm_borders("gray") + tm_text("cases", size=1, col="blue", fontface="bold") +
   #tm_view(view.legend.position=c("LEFT", "BOTTOM"))
-=======
+
 tm_shape(md_geomap_covid, projection = 2163) +  
   tm_fill("cases", title="Covid19 5-28-2020", breaks = seq(from=1, to = maxcase, by=2000)) +
   tm_borders("gray") + tm_text("cases", size=1, col="blue", fontface="bold") +
@@ -181,7 +181,7 @@ tm_shape(md_geomap_covid, projection = 2163) +
   tm_fill("cases", title="Covid19 5-28-2020", breaks = seq(from=1, to = maxcase, by=2000)) +
   tm_borders("gray") + tm_text("cases", size=1, col="blue", fontface="bold") +
   tm_view(view.legend.position=c("LEFT", "BOTTOM"))
->>>>>>> ff350052c16aab56ced237e32bc82cd3053a97e1
+
 
 
 #########################

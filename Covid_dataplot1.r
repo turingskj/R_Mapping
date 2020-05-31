@@ -11,7 +11,7 @@ library(usmap)
 #library(leaflet) # for interactive maps
 #library(mapview)
 library(ggplot2)
-
+library(plotly)
 
 # add Covid-19 data
 fileconnect1 <- url("https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv")
@@ -52,13 +52,29 @@ for (myvar in seq(1:nrow(covid_bardata))) {
   
 }
 
-ggplot(data=covid_bardata, aes(x=date, y=dailycase))+
+myplot2<-ggplot(data=covid_bardata, aes(x=date, y=dailycase))+
   geom_bar(stat="identity", width= 0.8) + scale_x_discrete(breaks = covid_bardata$dailycase[c(T,F,F)])
 
-ggplot(data=covid_bardata, aes(x=date, group=1 ))+
+myplot<-ggplot(data=covid_bardata, aes(x=date, group=1 ))+
   geom_bar(aes(y=dailycase), stat="identity", width= 0.5, color="darkorange", fill="pink") + 
   geom_line(aes(y = average7), stat="identity", color="red", size=1.2) +
-  scale_x_discrete(breaks = covid_bardata["date"][seq(1, nrow(covid_bardata), 15),])
+  scale_x_discrete(breaks = covid_bardata["date"][seq(1, nrow(covid_bardata), 20),])
+myplot
+myplot2
+
+grid.arrange(myplot, myplot2, ncol=2) # use "grid" package to arrange plots.
+
+library(gridExtra) # use this pacakge to arrange plots into one plot of grid
+
+myplotboth <- arrangeGrob(myplot, myplot2)
+grid::grid.draw(myplotboth)  # if the pacakge "grid" is not loaded, we can still acess its function
+                             # grid.draw() using "::" operator
+
+myplot
+# putting interactive charts in one plot
+a1<-ggplotly(myplot)
+a2<-ggplotly(myplot2)
+subplot(a1, a2)
 
 #############
 #############
