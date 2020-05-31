@@ -26,6 +26,8 @@ library(ggplot2)
 tmap_mode("plot")
 
 # us spData set (us_states...)
+# basic map plotting using spData us_states data set using tmap package
+
 us_states_map <- tm_shape(us_states, projection = 2163) + tm_polygons() + 
   tm_layout(frame = FALSE)
 us_states_map
@@ -42,7 +44,6 @@ library(dplyr)
 # using tmap and tigris package (census data map) # see the manual for tigris data
 us_geomap <- states(class="sf") # import feature data only using states() of the tigris package
 tm_shape(us_geomap, projection = 2163) + tm_polygons()  # this will show Alaska and Hawaii together
-
 
 
 #plot county map
@@ -62,22 +63,21 @@ us_geomap_ct$visited <- visited
 
 tm_shape(us_geomap_ct, projection = 2163) + tm_polygons("visited") #+ tm_text("NAME", size = 9/10)
 
-#plot county map
-us_geomap <- counties(class="sf") # import feature data only
-tm_shape(us_geomap, projection = 2163) + tm_polygons()
-
+#plot county map using tigris package function counties()
+#us_geomap <- counties(class="sf") # import feature data only including Alaska and Hawaii
+#tm_shape(us_geomap, projection = 2163) + tm_polygons()
 
 
 # get the names of continent us states + DC from spData set
 #my_usstates <- us_states$NAME
-my_usstates <- us_states[c("GEOID", "NAME")]
+#my_usstates <- us_states[c("GEOID", "NAME")]
 
-us_geomap_48 <- subset(us_geomap, us_geomap[["STATEFP"]] %in% my_usstates$GEOID)  
-visited <- runif(nrow(us_geomap_48), min=0, max=20)
-visited = floor(visited+0.5)
+#us_geomap_48 <- subset(us_geomap, us_geomap[["STATEFP"]] %in% my_usstates$GEOID)  
+#visited <- runif(nrow(us_geomap_48), min=0, max=20)
+#visited = floor(visited+0.5)
 
-us_geomap_48$visited <- visited
-tm_shape(us_geomap_48, projection = 2163) + tm_polygons("visited")
+#us_geomap_48$visited <- visited
+#tm_shape(us_geomap_48, projection = 2163) + tm_polygons("visited")
 
 
 
@@ -93,7 +93,7 @@ alldata$NAME <- alldata$county
 
 
 my_usstates <- us_states[c("GEOID", "NAME")]  # us_states is the dataset of spData package
-statecase <- tapply(alldata$cases, alldata$state, FUN=sum)
+statecase <- tapply(alldata$cases, alldata$state, FUN=sum)  # calculate total case by state
 statecase <- as.data.frame(statecase)
 statecase$NAME <- rownames(statecase)
 statecase <- subset(statecase, NAME %in% my_usstates$NAME)  
@@ -124,10 +124,11 @@ maxcase <- (ceiling(maxcase/100000))*100000
 #  tm_fill("cases", title="Covid19 5-28-2020", breaks = seq(from=0, to = maxcase, by=1000)) +
 #  tm_borders("black")
 
+#library(RColorBrewer)
 #tmap_mode("view")
 #qtm(us_geomap48_covid, projection = 2163, fill="cases", fill.title="Covid19-county", 
 #    fill.style="fixed", fill.breaks = seq(from=0, to = maxcase, by=1000), 
-#    fill.palette=brewer.pal(8, "Reds"), text="statecase")
+#    fill.palette=brewer.pal(8, "Reds"), text="cases")
 
 
 
@@ -147,9 +148,18 @@ md_geomap_covid <- merge(md_geomap, mddata, by="COUNTYFP")
 maxcase <- max(md_geomap_covid$cases)
 maxcase <- (ceiling(maxcase/10000))*10000
 
+tmap_mode("plot")
 tm_shape(md_geomap_covid, projection = 2163) +  
-  tm_fill("cases", title="Covid19 5-28-2020", breaks = seq(from=1, to = maxcase, by=3000)) +
-  tm_borders("gray") + tm_text("NAME", size=4/5, col="blue", fontface="bold")
+  tm_fill("cases", title="Covid19 5-28-2020", breaks = seq(from=1, to = maxcase, by=2000)) +
+  tm_borders("gray") + tm_text("cases", size=1, col="blue", fontface="bold") +
+  tm_layout(legend.position = c("LEFT", "BOTTOM"))
+
+
+tmap_mode("view")
+tm_shape(md_geomap_covid, projection = 2163) +  
+  tm_fill("cases", title="Covid19 5-28-2020", breaks = seq(from=1, to = maxcase, by=2000)) +
+  tm_borders("gray") + tm_text("cases", size=1, col="blue", fontface="bold") +
+  tm_view(view.legend.position=c("LEFT", "BOTTOM"))
 
 
 #########################
@@ -167,7 +177,7 @@ my_usstates <- us_states[c("GEOID", "NAME")]
 visited <- runif(nrow(my_usstates), min=0, max=20)
 my_usstates$visited = floor(visited+0.5)
 tm_shape(my_usstates, projection = 2163) + tm_polygons("visited")
-tm_shape(my_usstates, projection = 2163) + tm_polygons()
+#tm_shape(my_usstates, projection = 2163) + tm_polygons()
 
 
 
