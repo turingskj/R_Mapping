@@ -113,6 +113,6 @@ ggplot(data=mdcovid_bardata, aes(x=date, group=1 ))+
   geom_bar(aes(y=dailycase), stat="identity", width= 1, color="white", fill="blue") + 
   geom_line(aes(y = average7), stat="identity", color="red", size=1.2) +
   scale_x_discrete(breaks = mdcovid_bardata["date"][seq(1, nrow(mdcovid_bardata), 15),])
-♠
+
 
 
