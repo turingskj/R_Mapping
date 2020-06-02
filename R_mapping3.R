@@ -84,12 +84,16 @@ tm_shape(us_geomap_ct, projection = 2163) + tm_polygons("visited") #+ tm_text("N
 # add Covid-19 data
 fileconnect1 <- url("https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv")
 Alldata <- read.table(fileconnect1, sep =",", header = TRUE, encoding="UTF-8", quote = "\"")
+
+
 head(Alldata)  # check if county names include numeric values
 mydate <- "2020-05-30"
 mddata <- subset(Alldata, state=="Maryland" & date ==mydate)
 dedata <- subset(Alldata, state=="Delaware" & date ==mydate)
 alldata <-subset(Alldata, date ==mydate)
 alldata$NAME <- alldata$county
+
+save(Alldata, alldata, mddata, dedata, mydate, file="Data/All_covid19_data.RData")
 
 
 my_usstates <- us_states[c("GEOID", "NAME")]  # us_states is the dataset of spData package
