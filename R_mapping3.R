@@ -119,10 +119,16 @@ us_geomap48_covid <- merge(us_geomap_48, alldata, by="NAME")
 maxcase <- max(us_geomap48_covid$cases)
 maxcase <- (ceiling(maxcase/100000))*100000
 
+
+tmap_mode("plot")
 # do not plot. takes too long in a slow computer
-#tm_shape(us_geomap48_covid, projection = 2163) +  
-#  tm_fill("cases", title="Covid19 5-28-2020", breaks = seq(from=0, to = maxcase, by=5000)) +
-#  tm_borders("black")
+starttime<-Sys.time()
+tm_shape(us_geomap48_covid, projection = 2163) +  
+  tm_fill("cases", title="Covid19 5-28-2020", breaks = seq(from=0, to = maxcase, by=5000)) +
+  tm_borders("black")
+endtime<-Sys.time()
+endtime - starttime
+
 
 
 library(RColorBrewer)
