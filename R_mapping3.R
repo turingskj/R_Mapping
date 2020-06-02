@@ -115,6 +115,8 @@ tm_shape(my_usstates_covid19, projection = 2163) +
 load("Data/All_covid19_data.RData")
 
 us_geomap <- counties(class="sf", cb=TRUE, resolution="5m") # import feature data only; higher resolution (500k) is default
+us_geomap <- counties(class="sf") # import feature data only; higher resolution (500k) is default
+
 my_usstates <- us_states$NAME  # from spData
 my_usstates <- us_states[c("GEOID", "NAME")]
 us_geomap_48 <- subset(us_geomap, us_geomap[["STATEFP"]] %in% my_usstates$GEOID)  
