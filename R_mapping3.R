@@ -133,9 +133,12 @@ endtime - starttime
 
 library(RColorBrewer)
 tmap_mode("view")
+starttime <-Sys.time()
 qtm(us_geomap48_covid, projection = 2163, fill="cases", fill.title="Covid19-county", 
     fill.style="fixed", fill.breaks = seq(from=0, to = maxcase, by=5000), 
-    fill.palette=brewer.pal(8, "Reds"), text="cases")
+    fill.palette=brewer.pal(8, "Reds"))#, text="cases")
+endtime <-Sys.time()
+endtime - starttime
 
 #library(RColorBrewer)
 #tmap_mode("plot")
