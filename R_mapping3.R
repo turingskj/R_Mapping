@@ -112,6 +112,7 @@ tm_shape(my_usstates_covid19, projection = 2163) +
 
 
 # Add covid 19 data to county maps
+load("Data/All_covid19_data.RData")
 
 us_geomap <- counties(class="sf", cb=TRUE, resolution="5m") # import feature data only; higher resolution (500k) is default
 my_usstates <- us_states$NAME  # from spData
@@ -163,7 +164,7 @@ endtime - starttime
 
 
 # Add covid 19 county data MD map only.
-
+load("Data/All_covid19+data.RData")
 us_geomap <- counties(class="sf") # import feature data only
 
 mydate <- "2020-05-28"
