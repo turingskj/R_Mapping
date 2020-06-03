@@ -106,16 +106,22 @@ my_usstates_covid19 <- merge(my_usstates, statecase, by="NAME")
 maxcase <- max(statecase$statecase)
 maxcase <- (ceiling(maxcase/100000))*100000
 
+mybreaks <- seq(from=1, to = maxcase, by=30000)
+breakLength <- length(mybreaks) 
+
+tmap_mode("plot")
 tm_shape(my_usstates_covid19, projection = 2163) +  
-  tm_fill("statecase", title="Covid19 5-26-2020", breaks = seq(from=0, to = maxcase, by=50000)) +
-  tm_borders("black") + tm_text("statecase", size = 3/5)
+  tm_fill("statecase", palette = brewer.pal(breakLength, "Blues"), alpha=1, title="Covid19 5-26-2020", breaks = mybreaks) +
+  tm_borders("black") + tm_text("statecase", size = 3/5) # +
+  #tm_scale_bar(color.dark="blue", color.light="white")
+
 
 
 # Add covid 19 data to county maps
 load("Data/All_covid19_data.RData")
 
 #us_geomap <- counties(class="sf", cb=TRUE, resolution="5m") # import feature data only; higher resolution (500k) is default
-us_geomap <- counties(class="sf", cb=TRUE) # import feature data only; higher resolution (500k) is default
+us_geomap <- counties(class="sf", cb=TRUE, resolution="5m") # import feature data only; higher resolution (500k) is default
 
 my_usstates <- us_states$NAME  # from spData
 my_usstates <- us_states[c("GEOID", "NAME")]
@@ -170,7 +176,7 @@ endtime - starttime
 load("Data/All_covid19+data.RData")
 us_geomap <- counties(class="sf") # import feature data only
 
-mydate <- "2020-05-28"
+mydate <- "2020-05-31"
 mddata <- subset(Alldata, state=="Maryland" & date ==mydate)
 mddata <-na.omit(mddata)
 mddata$COUNTYFP <- gsub("24", "", mddata$fips)
@@ -189,7 +195,7 @@ tm_shape(md_geomap_covid, projection = 2163) +
   tm_layout(legend.position = c("LEFT", "BOTTOM"))
 
 tm_shape(md_geomap_covid, projection = 2163) +  
-  tm_fill("cases", title="Covid19 5-28-2020", breaks = c(1, 50, 100, 200, 500, 1000, 5000, 10000, 15000, 20000)) +
+  tm_fill("cases",  title="Covid19 5-28-2020", breaks = c(1, 50, 100, 200, 500, 1000, 5000, 10000, 15000, 20000)) +
   tm_borders("gray") + tm_text("cases", size=1, col="navy", fontface="bold") +
   tm_layout(legend.position = c("LEFT", "BOTTOM"))
 
