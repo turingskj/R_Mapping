@@ -114,8 +114,8 @@ tm_shape(my_usstates_covid19, projection = 2163) +
 # Add covid 19 data to county maps
 load("Data/All_covid19_data.RData")
 
-us_geomap <- counties(class="sf", cb=TRUE, resolution="5m") # import feature data only; higher resolution (500k) is default
-us_geomap <- counties(class="sf") # import feature data only; higher resolution (500k) is default
+#us_geomap <- counties(class="sf", cb=TRUE, resolution="5m") # import feature data only; higher resolution (500k) is default
+us_geomap <- counties(class="sf", cb=TRUE) # import feature data only; higher resolution (500k) is default
 
 my_usstates <- us_states$NAME  # from spData
 my_usstates <- us_states[c("GEOID", "NAME")]
@@ -146,14 +146,15 @@ qtm(us_geomap48_covid, projection = 2163, fill="cases", fill.title="Covid19-coun
     fill.style="fixed", fill.breaks = seq(from=0, to = maxcase, by=5000), 
     fill.palette=brewer.pal(8, "Reds"))#, text="cases")
 
+endtime <-Sys.time()
+endtime - starttime
+
 #tmap_mode("plot")
 #starttime <-Sys.time()
 #qtm(us_geomap48_covid, projection = 2163, fill="cases", fill.title="Covid19-county", 
 #    fill.style="fixed", fill.breaks = seq(from=0, to = maxcase, by=5000), 
 #    fill.palette=brewer.pal(8, "Reds"), text="cases")
 
-endtime <-Sys.time()
-endtime - starttime
 
 #library(RColorBrewer)
 #tmap_mode("plot")

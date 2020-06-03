@@ -62,10 +62,8 @@ myplot<-ggplot(data=covid_bardata, aes(x=date, group=1 ))+
 myplot
 myplot2
 library(grid)
-grid.arrange(myplot, myplot2, ncol=2) # use "grid" package to arrange plots.
-
 library(gridExtra) # use this pacakge to arrange plots into one plot of grid
-
+grid.arrange(myplot, myplot2, ncol=2) # use "grid" package to arrange plots.
 myplotboth <- arrangeGrob(myplot, myplot2)
 grid.draw(myplotboth)  # if the pacakge "grid" is not loaded, we can still acess its function
                              # grid.draw() using "::" operator
@@ -75,7 +73,7 @@ myplot
 a1<-ggplotly(myplot)
 a2<-ggplotly(myplot2)
 subplot(a1, a2)
-
+ggplotly(myplot)
 #############
 #############
 
@@ -125,10 +123,11 @@ for (myvar in seq(1:nrow(mdcovid_bardata))) {
 ggplot(data=mdcovid_bardata, aes(x=date, y=dailycase))+
   geom_bar(stat="identity", width= 0.8) + scale_x_discrete(breaks = mdcovid_bardata$dailycase[c(T,F,F)])
 
-ggplot(data=mdcovid_bardata, aes(x=date, group=1 ))+
-  geom_bar(aes(y=dailycase), stat="identity", width= 1, color="white", fill="blue") + 
+mdplot<- ggplot(data=mdcovid_bardata, aes(x=date, group=1 ))+
+  geom_bar(aes(y=dailycase), stat="identity", width= 0.5, color="blue", fill="blue") + 
   geom_line(aes(y = average7), stat="identity", color="red", size=1.2) +
   scale_x_discrete(breaks = mdcovid_bardata["date"][seq(1, nrow(mdcovid_bardata), 15),])
 
 
+ggplotly(mdplot)
 
