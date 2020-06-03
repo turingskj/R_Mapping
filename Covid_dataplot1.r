@@ -62,10 +62,8 @@ myplot<-ggplot(data=covid_bardata, aes(x=date, group=1 ))+
 myplot
 myplot2
 library(grid)
-grid.arrange(myplot, myplot2, ncol=2) # use "grid" package to arrange plots.
-
 library(gridExtra) # use this pacakge to arrange plots into one plot of grid
-
+grid.arrange(myplot, myplot2, ncol=2) # use "grid" package to arrange plots.
 myplotboth <- arrangeGrob(myplot, myplot2)
 grid.draw(myplotboth)  # if the pacakge "grid" is not loaded, we can still acess its function
                              # grid.draw() using "::" operator
@@ -75,7 +73,7 @@ myplot
 a1<-ggplotly(myplot)
 a2<-ggplotly(myplot2)
 subplot(a1, a2)
-
+ggplotly(myplot)
 #############
 #############
 
