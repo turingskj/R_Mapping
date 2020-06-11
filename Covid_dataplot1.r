@@ -58,14 +58,15 @@ myplot2<-ggplot(data=covid_bardata, aes(x=date, y=dailycase))+
 myplot<-ggplot(data=covid_bardata, aes(x=date, group=1 ))+
   geom_bar(aes(y=dailycase), stat="identity", width= 0.5, color="darkorange", fill="pink") + 
   geom_line(aes(y = average7), stat="identity", color="red", size=1.2) +
-  scale_x_discrete(breaks = covid_bardata["date"][seq(1, nrow(covid_bardata), 15),])
+  scale_x_discrete(breaks = covid_bardata["date"][seq(1, nrow(covid_bardata), 15),]) +
+  theme(aspect.ratio= 0.5)
 
 # different x scale
 myplot<-ggplot(data=covid_bardata, aes(x=date, group=1 ))+
   geom_bar(aes(y=dailycase), stat="identity", width= 0.5, color="darkorange", fill="pink") + 
   geom_line(aes(y = average7), stat="identity", color="red", size=1.2) +
   scale_x_discrete(breaks = covid_bardata["date"][rev(seq(nrow(covid_bardata), 1, -15)),]) + 
-  theme(aspect.ratio = 1.6/3)
+  theme(aspect.ratio = 2/3)
 
 
 myplot
