@@ -14,8 +14,11 @@ library(ggplot2)
 library(plotly)
 
 # add Covid-19 data
+cat('Downloading data from the NYT data repository...\n')
 fileconnect1 <- url("https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv")
 Alldata <- read.table(fileconnect1, sep =",", header = TRUE, encoding="UTF-8", quote = "\"")
+cat('Done downloading.\n')
+
 head(Alldata)  # check if county names include numeric values
 mydate <- "2020-03-01"
 #mddata <- subset(Alldata, state=="Maryland" & date ==mydate)
