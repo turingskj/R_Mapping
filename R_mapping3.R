@@ -40,7 +40,7 @@ us_alaska_map
 
 library(tigris)
 library(dplyr)
-
+library(RColorBrewer)
 # using tmap and tigris package (census data map) # see the manual for tigris data
 us_geomap <- states(class="sf") # import feature data only using states() of the tigris package
 tm_shape(us_geomap, projection = 2163) + tm_polygons()  # this will show Alaska and Hawaii together
@@ -108,7 +108,7 @@ maxcase <- (ceiling(maxcase/100000))*100000
 
 mybreaks <- seq(from=1, to = maxcase, by=50000)
 breakLength <- length(mybreaks) 
-#textname <- c("1 to 80,000", "80,001 to 160,000", "160,001 to 240,000", "240,001 to 320,000" )
+textname <- c("1 to 80,000", "80,001 to 160,000", "160,001 to 240,000", "240,001 to 320,000" )
 tmap_mode("plot")
 
 # manuall set the legend labels
