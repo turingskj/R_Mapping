@@ -48,7 +48,7 @@ for (myvar in seq(1:nrow(covid_bardata))) {
 myplot<-ggplot(data=covid_bardata, aes(x=date, group=1 ))+
   geom_bar(aes(y=dailycase), stat="identity", width= 0.5, color="darkorange", fill="pink") + 
   geom_line(aes(y = average7), stat="identity", color="red", size=1.2) +
-  scale_x_discrete(breaks = covid_bardata["date"][seq(1, nrow(covid_bardata), 20),]) +
+  scale_x_discrete(breaks = covid_bardata["date"][seq(1, nrow(covid_bardata), 40),]) +
   theme(aspect.ratio= 0.5)
 
 
