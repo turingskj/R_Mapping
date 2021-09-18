@@ -52,9 +52,6 @@ myplot<-ggplot(data=covid_bardata, aes(x=date, group=1 ))+
   theme(aspect.ratio= 0.5)
 
 
-
-
-
 myplot
 ggplotly(myplot)
 
