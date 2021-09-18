@@ -166,6 +166,8 @@ scale_fill_continuous(low = "white", high = "red", name = paste("Covid19 cases")
                         breaks = seq(from=0, to = maxcase, by=100000), label = scales::comma) +  theme(legend.position = "right" ) 
 
 
+
+
 plot_usmap(data=statepop, value="pop_2015") +
   scale_fill_continuous(low = "white", high = "red", name = paste("2015 State Pop", mydate), label = scales::comma) +
   theme(legend.position = "right" )
