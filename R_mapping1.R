@@ -57,6 +57,7 @@ us_geomap_48 <- subset(us_geomap, us_geomap[["NAME"]] %in% my_usstates)
 us_geomap_48$visited <- visited
 tm_shape(us_geomap_48, projection = 2163) + tm_polygons("visited")
 
+
 # add Covid-19 data
 fileconnect1 <- url("https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv")
 Alldata <- read.table(fileconnect1, sep =",", header = TRUE, encoding="UTF-8", quote = "\"")
